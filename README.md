@@ -1,4 +1,4 @@
-# WePO (Web Photo Optimizer)
+# WEPO — Web Image Processing Tool
 
 WePO is a Python-based tool designed to optimize images for web use. It processes images to reduce their resolution and dimensions while maintaining quality, making them suitable for faster loading times on websites.
 
