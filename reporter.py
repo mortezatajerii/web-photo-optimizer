@@ -67,7 +67,7 @@ def show_banner():
     )
 
     console.print(
-        "Version 1.2.0",
+        "Version 1.3.0",
         style="dim",
     )
 
