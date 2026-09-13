@@ -23,6 +23,8 @@ from cli import (
     show_saved,
     show_reset,
     pause,
+    start_screen,
+    clear_screen,
 )
 
 from reporter import (
@@ -105,6 +107,8 @@ def process_images(settings):
         elif action == "clear":
             clear_output_directory()
 
+    start_screen("Processing Images")
+
     results = []
     errors = []
 
@@ -148,6 +152,8 @@ def process_images(settings):
 
             finally:
                 progress.advance(task)
+
+    start_screen("Processing Results")
 
     # Display individual results after processing.
     for result in results:
@@ -222,7 +228,6 @@ def main():
 
     settings = load_settings()
 
-    show_banner()
 
     while True:
 

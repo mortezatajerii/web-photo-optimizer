@@ -1,3 +1,4 @@
+import os
 import questionary
 
 from rich.console import Console
@@ -7,7 +8,34 @@ from rich.table import Table
 from bidi.algorithm import get_display
 from questionary import Choice
 
+from reporter import show_banner
 console = Console()
+
+
+# =========================================================
+# Screen Manager
+# =========================================================
+
+
+def clear_screen():
+    """
+    Clear the terminal screen.
+    """
+
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+def start_screen(title=None):
+    """
+    Start a new terminal screen.
+    """
+
+    clear_screen()
+
+    if title:
+        console.print()
+        console.print(f"[bold]{title}[/bold]")
+        console.print()
 
 
 # =========================================================
@@ -39,6 +67,10 @@ def main_menu():
     """
     Display the main menu of WEPO.
     """
+
+    start_screen("WEPO")
+
+    show_banner()
 
     return questionary.select(
         rtl("Select an operation:"),
@@ -77,6 +109,8 @@ def settings_menu(settings):
     """
     Display and manage WEPO settings.
     """
+
+    start_screen("WEPO Settings")
 
     while True:
 
@@ -233,6 +267,8 @@ def show_settings(settings):
     """
     Display the current WEPO settings using Rich.
     """
+
+    start_screen("Current WEPO Settings")
 
     table = Table(
         title="Current WEPO Settings",
