@@ -68,7 +68,7 @@ def main_menu():
     Display the main menu of WEPO.
     """
 
-    start_screen("WEPO")
+    start_screen()
 
     show_banner()
 
