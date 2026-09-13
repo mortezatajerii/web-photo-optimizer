@@ -75,6 +75,27 @@ def show_banner():
 
 
 # =========================================================
+# Size Change
+# =========================================================
+
+
+def format_size_change(reduction):
+    """
+    Format the file size change with a direction indicator.
+    """
+
+    if reduction > 0:
+        return f"[green]↓ {reduction:.1f}% smaller[/green]"
+
+    if reduction < 0:
+        increase = abs(reduction)
+
+        return f"[red]↑ {increase:.1f}% larger[/red]"
+
+    return "[yellow]→ No size change[/yellow]"
+
+
+# =========================================================
 # Processing result
 # =========================================================
 
@@ -85,14 +106,20 @@ def show_processing_result(result):
     """
 
     input_file = result["input_file"]
+    output_file = result["output_file"]
+
     original_size = result["original_size"]
     output_size = result["output_size"]
+
     reduction = result["reduction"]
+
+    output_format = result["output_format"].upper()
 
     console.print(f"[green]✓[/green] {input_file.name}")
 
     console.print(
-        f"  {result['original_width']} × "
+        f"  Dimensions: "
+        f"{result['original_width']} × "
         f"{result['original_height']} "
         f"→ "
         f"{result['new_width']} × "
@@ -100,11 +127,12 @@ def show_processing_result(result):
     )
 
     console.print(
-        f"  {format_size(original_size)} "
-        f"→ "
-        f"{format_size(output_size)} "
-        f"([green]{reduction:.1f}%[/green])"
+        f"  Size: " f"{format_size(original_size)} " f"→ " f"{format_size(output_size)}"
     )
+
+    console.print(f"  Change: " f"{format_size_change(reduction)}")
+
+    console.print(f"  Output: " f"{output_file.name} " f"({output_format})")
 
     console.print()
 
