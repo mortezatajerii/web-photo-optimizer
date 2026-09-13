@@ -9,6 +9,7 @@ from bidi.algorithm import get_display
 from questionary import Choice
 
 from reporter import show_banner
+
 console = Console()
 
 
@@ -107,110 +108,48 @@ def main_menu():
 
 def settings_menu(settings):
     """
-    Display and manage WEPO settings.
+    Display the WEPO settings menu.
     """
 
     start_screen("WEPO Settings")
 
-    while True:
-
-        choice = questionary.select(
-            rtl("WEPO Settings:"),
-            choices=[
-                Choice(
-                    rtl(f"Maximum Width: {settings['max_width']} px"),
-                    value="max_width",
+    return questionary.select(
+        rtl("WEPO Settings:"),
+        choices=[
+            Choice(
+                rtl(f"Output Format: " f"{settings['output_format'].upper()}"),
+                value="output_format",
+            ),
+            Choice(
+                rtl(f"Maximum Width: {settings['max_width']} px"),
+                value="max_width",
+            ),
+            Choice(
+                rtl(f"Maximum Height: {settings['max_height']} px"),
+                value="max_height",
+            ),
+            Choice(
+                rtl(f"Quality: {settings['quality']}"),
+                value="quality",
+            ),
+            Choice(
+                rtl(f"WebP Encoding Method: " f"{settings['webp_method']}"),
+                value="webp_method",
+            ),
+            Choice(
+                rtl(
+                    "Preserve Transparency: "
+                    f"{'Yes' if settings['preserve_transparency'] else 'No'}"
                 ),
-                Choice(
-                    rtl(f"Maximum Height: {settings['max_height']} px"),
-                    value="max_height",
-                ),
-                Choice(
-                    rtl(f"WebP Quality: {settings['webp_quality']}"),
-                    value="webp_quality",
-                ),
-                Choice(
-                    rtl(f"WebP Method: {settings['webp_method']}"),
-                    value="webp_method",
-                ),
-                Choice(
-                    rtl(
-                        "Preserve Transparency: "
-                        f"{'Yes' if settings['preserve_transparency'] else 'No'}"
-                    ),
-                    value="preserve_transparency",
-                ),
-                Choice(
-                    rtl("Back"),
-                    value="back",
-                ),
-            ],
-            pointer=">",
-        ).ask()
-
-        # Return to the previous menu if the user cancels or selects "Back".
-        if choice is None or choice == "back":
-            return settings
-
-        # ---------------------------------------------
-        # Max Width
-        # ---------------------------------------------
-
-        if choice == "max_width":
-            settings["max_width"] = ask_integer(
-                message="Maximum image width:",
-                default=settings["max_width"],
-                minimum=1,
-            )
-
-        # ---------------------------------------------
-        # Max Height
-        # ---------------------------------------------
-
-        elif choice == "max_height":
-            settings["max_height"] = ask_integer(
-                message="Maximum image height:",
-                default=settings["max_height"],
-                minimum=1,
-            )
-
-        # ---------------------------------------------
-        # WebP Quality
-        # ---------------------------------------------
-
-        elif choice == "webp_quality":
-            settings["webp_quality"] = ask_integer(
-                message="WebP quality:",
-                default=settings["webp_quality"],
-                minimum=1,
-                maximum=100,
-            )
-
-        # ---------------------------------------------
-        # WebP Method
-        # ---------------------------------------------
-
-        elif choice == "webp_method":
-            settings["webp_method"] = ask_integer(
-                message="WebP encoding method:",
-                default=settings["webp_method"],
-                minimum=0,
-                maximum=6,
-            )
-
-        # ---------------------------------------------
-        # Transparency
-        # ---------------------------------------------
-
-        elif choice == "preserve_transparency":
-
-            result = questionary.confirm(
-                rtl("Preserve image transparency?"),
-                default=settings["preserve_transparency"],
-            ).ask()
-
-            if result is not None:
-                settings["preserve_transparency"] = result
+                value="preserve_transparency",
+            ),
+            Choice(
+                rtl("Back"),
+                value="back",
+            ),
+        ],
+        pointer=">",
+    ).ask()
 
 
 # =========================================================
@@ -259,6 +198,27 @@ def ask_integer(
 
 
 # =========================================================
+# Output Format
+# =========================================================
+
+
+def ask_output_format(current):
+    """
+    Ask the user to select the output image format.
+    """
+
+    return questionary.select(
+        rtl("Select output format:"),
+        choices=[
+            Choice(rtl("WebP"), value="webp"),
+            Choice(rtl("JPEG"), value="jpeg"),
+            Choice(rtl("PNG"), value="png"),
+        ],
+        default=current,
+    ).ask()
+
+
+# =========================================================
 # Settings Display
 # =========================================================
 
@@ -297,13 +257,18 @@ def show_settings(settings):
     )
 
     table.add_row(
-        rtl("WebP Quality"),
-        str(settings["webp_quality"]),
+        rtl("Quality"),
+        str(settings["quality"]),
     )
 
     table.add_row(
         rtl("WebP Encoding Method"),
         str(settings["webp_method"]),
+    )
+
+    table.add_row(
+        rtl("Output Format"),
+        settings["output_format"].upper(),
     )
 
     table.add_row(

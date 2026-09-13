@@ -12,6 +12,7 @@ from processor import process_image
 
 from cli import (
     rtl,
+    start_screen,
     main_menu,
     settings_menu,
     show_settings,
@@ -23,12 +24,11 @@ from cli import (
     show_saved,
     show_reset,
     pause,
-    start_screen,
-    clear_screen,
+    ask_integer,
+    ask_output_format,
 )
 
 from reporter import (
-    show_banner,
     show_processing_result,
     show_summary,
 )
@@ -179,7 +179,57 @@ def manage_settings(settings):
 
     original_settings = settings.copy()
 
-    settings_menu(settings)
+    while True:
+
+        choice = settings_menu(settings)
+
+        if choice is None or choice == "back":
+            break
+
+        if choice == "output_format":
+
+            value = ask_output_format(settings["output_format"])
+
+            if value is not None:
+                settings["output_format"] = value
+
+        elif choice == "max_width":
+
+            settings["max_width"] = ask_integer(
+                "Maximum image width:",
+                settings["max_width"],
+                minimum=1,
+            )
+
+        elif choice == "max_height":
+
+            settings["max_height"] = ask_integer(
+                "Maximum image height:",
+                settings["max_height"],
+                minimum=1,
+            )
+
+        elif choice == "quality":
+
+            settings["quality"] = ask_integer(
+                "Image quality:",
+                settings["quality"],
+                minimum=1,
+                maximum=100,
+            )
+
+        elif choice == "webp_method":
+
+            settings["webp_method"] = ask_integer(
+                "WebP encoding method:",
+                settings["webp_method"],
+                minimum=0,
+                maximum=6,
+            )
+
+        elif choice == "preserve_transparency":
+
+            settings["preserve_transparency"] = not settings["preserve_transparency"]
 
     # Ask whether to save the changes only when
     # at least one setting has been modified.
@@ -227,7 +277,6 @@ def main():
     prepare_directories()
 
     settings = load_settings()
-
 
     while True:
 

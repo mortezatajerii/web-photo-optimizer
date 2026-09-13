@@ -19,7 +19,13 @@ def rtl(text):
     without proper bidirectional text support.
     """
 
-    return get_display(text)
+    # return get_display(text)
+
+    """
+    Return text without applying bidirectional text processing.
+    """
+
+    return text
 
 
 # =========================================================

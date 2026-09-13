@@ -22,9 +22,10 @@ SETTINGS_FILE = BASE_DIR / "settings.json"
 DEFAULT_SETTINGS = {
     "max_width": 1920,
     "max_height": 1080,
-    "webp_quality": 80,
+    "quality": 80,
     "webp_method": 6,
     "preserve_transparency": True,
+    "output_format": "webp",
 }
 
 
