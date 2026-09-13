@@ -21,7 +21,13 @@ def rtl(text):
     without proper bidirectional text support.
     """
 
-    return get_display(text)
+    # return get_display(text)
+
+    """
+    Return text without applying bidirectional text processing.
+    """
+
+    return text
 
 
 # =========================================================
@@ -35,27 +41,27 @@ def main_menu():
     """
 
     return questionary.select(
-        rtl("عملیات موردنظر را انتخاب کنید:"),
+        rtl("Select an operation:"),
         choices=[
             Choice(
-                rtl("پردازش تصاویر"),
-                value="پردازش تصاویر",
+                rtl("Process Images"),
+                value="process_images",
             ),
             Choice(
-                rtl("تنظیمات"),
-                value="تنظیمات",
+                rtl("Settings"),
+                value="settings",
             ),
             Choice(
-                rtl("مشاهده تنظیمات"),
-                value="مشاهده تنظیمات",
+                rtl("View Settings"),
+                value="view_settings",
             ),
             Choice(
-                rtl("بازنشانی تنظیمات"),
-                value="بازنشانی تنظیمات",
+                rtl("Reset Settings"),
+                value="reset_settings",
             ),
             Choice(
-                rtl("خروج"),
-                value="خروج",
+                rtl("Exit"),
+                value="exit",
             ),
         ],
         pointer=">",
@@ -75,33 +81,33 @@ def settings_menu(settings):
     while True:
 
         choice = questionary.select(
-            rtl("تنظیمات WEPO:"),
+            rtl("WEPO Settings:"),
             choices=[
                 Choice(
-                    rtl(f"حداکثر عرض: {settings['max_width']} px"),
+                    rtl(f"Maximum Width: {settings['max_width']} px"),
                     value="max_width",
                 ),
                 Choice(
-                    rtl(f"حداکثر ارتفاع: {settings['max_height']} px"),
+                    rtl(f"Maximum Height: {settings['max_height']} px"),
                     value="max_height",
                 ),
                 Choice(
-                    rtl(f"کیفیت WebP: {settings['webp_quality']}"),
+                    rtl(f"WebP Quality: {settings['webp_quality']}"),
                     value="webp_quality",
                 ),
                 Choice(
-                    rtl(f"روش فشرده سازی WebP: {settings['webp_method']}"),
+                    rtl(f"WebP Method: {settings['webp_method']}"),
                     value="webp_method",
                 ),
                 Choice(
                     rtl(
-                        "حفظ شفافیت: "
-                        f"{'بله' if settings['preserve_transparency'] else 'خیر'}"
+                        "Preserve Transparency: "
+                        f"{'Yes' if settings['preserve_transparency'] else 'No'}"
                     ),
                     value="preserve_transparency",
                 ),
                 Choice(
-                    rtl("بازگشت"),
+                    rtl("Back"),
                     value="back",
                 ),
             ],
@@ -118,7 +124,7 @@ def settings_menu(settings):
 
         if choice == "max_width":
             settings["max_width"] = ask_integer(
-                message="حداکثر عرض تصویر:",
+                message="Maximum image width:",
                 default=settings["max_width"],
                 minimum=1,
             )
@@ -129,7 +135,7 @@ def settings_menu(settings):
 
         elif choice == "max_height":
             settings["max_height"] = ask_integer(
-                message="حداکثر ارتفاع تصویر:",
+                message="Maximum image height:",
                 default=settings["max_height"],
                 minimum=1,
             )
@@ -140,7 +146,7 @@ def settings_menu(settings):
 
         elif choice == "webp_quality":
             settings["webp_quality"] = ask_integer(
-                message="کیفیت WebP:",
+                message="WebP quality:",
                 default=settings["webp_quality"],
                 minimum=1,
                 maximum=100,
@@ -152,7 +158,7 @@ def settings_menu(settings):
 
         elif choice == "webp_method":
             settings["webp_method"] = ask_integer(
-                message="روش فشرده سازی WebP:",
+                message="WebP encoding method:",
                 default=settings["webp_method"],
                 minimum=0,
                 maximum=6,
@@ -165,7 +171,7 @@ def settings_menu(settings):
         elif choice == "preserve_transparency":
 
             result = questionary.confirm(
-                rtl("آیا شفافیت تصاویر حفظ شود؟"),
+                rtl("Preserve image transparency?"),
                 default=settings["preserve_transparency"],
             ).ask()
 
@@ -193,15 +199,15 @@ def ask_integer(
         value = value.strip()
 
         if not value.isdigit():
-            return rtl("لطفاً یک عدد معتبر وارد کنید.")
+            return rtl("Please enter a valid number.")
 
         number = int(value)
 
         if minimum is not None and number < minimum:
-            return rtl(f"مقدار باید حداقل {minimum} باشد.")
+            return rtl(f"Value must be at least {minimum}.")
 
         if maximum is not None and number > maximum:
-            return rtl(f"مقدار باید حداکثر {maximum} باشد.")
+            return rtl(f"Value must be at most {maximum}.")
 
         return True
 
@@ -229,44 +235,44 @@ def show_settings(settings):
     """
 
     table = Table(
-        title="تنظیمات فعلی WEPO",
+        title="Current WEPO Settings",
         show_header=True,
         header_style="bold",
     )
 
     table.add_column(
-        rtl("تنظیم"),
+        rtl("Setting"),
         justify="right",
     )
 
     table.add_column(
-        rtl("مقدار"),
+        rtl("Value"),
         justify="left",
     )
 
     table.add_row(
-        rtl("حداکثر عرض"),
+        rtl("Maximum Width"),
         f"{settings['max_width']} px",
     )
 
     table.add_row(
-        rtl("حداکثر ارتفاع"),
+        rtl("Maximum Height"),
         f"{settings['max_height']} px",
     )
 
     table.add_row(
-        rtl("کیفیت WebP"),
+        rtl("WebP Quality"),
         str(settings["webp_quality"]),
     )
 
     table.add_row(
-        rtl("روش فشرده سازی WebP"),
+        rtl("WebP Encoding Method"),
         str(settings["webp_method"]),
     )
 
     table.add_row(
-        rtl("حفظ شفافیت"),
-        rtl("بله" if settings["preserve_transparency"] else "خیر"),
+        rtl("Preserve Transparency"),
+        rtl("Yes" if settings["preserve_transparency"] else "No"),
     )
 
     console.print()
@@ -285,7 +291,7 @@ def confirm_save_settings():
     """
 
     return questionary.confirm(
-        rtl("تغییرات تنظیمات ذخیره شوند؟"),
+        rtl("Save the updated settings?"),
         default=True,
     ).ask()
 
@@ -301,7 +307,7 @@ def confirm_processing(image_count):
     """
 
     return questionary.confirm(
-        rtl(f"{image_count} تصویر پیدا شد. پردازش شروع شود؟"),
+        rtl(f"{image_count} image(s) found. Start processing?"),
         default=True,
     ).ask()
 
@@ -317,18 +323,18 @@ def output_folder_action():
     """
 
     return questionary.select(
-        rtl("پوشه خروجی خالی نیست. چه کاری انجام شود؟"),
+        rtl("The output folder is not empty. What would you like to do?"),
         choices=[
             Choice(
-                rtl("پاک کردن خروجی قبلی و شروع پردازش"),
+                rtl("Clear previous output and start processing"),
                 value="clear",
             ),
             Choice(
-                rtl("حفظ فایل های قبلی و شروع پردازش"),
+                rtl("Keep existing files and start processing"),
                 value="keep",
             ),
             Choice(
-                rtl("بازگشت"),
+                rtl("Back"),
                 value="back",
             ),
         ],
@@ -347,7 +353,7 @@ def show_reset_confirmation():
     """
 
     return questionary.confirm(
-        rtl("تنظیمات به حالت اصلی بازگردانده شوند؟"),
+        rtl("Reset settings to their default values?"),
         default=False,
     ).ask()
 
@@ -364,7 +370,7 @@ def show_no_images():
 
     console.print(
         Panel(
-            rtl("هیچ تصویر پشتیبانی شده ای در پوشه input پیدا نشد."),
+            rtl("No supported images were found in the input folder."),
             title="WEPO",
             border_style="yellow",
         )
@@ -376,7 +382,7 @@ def show_saved():
     Display a message after the settings are successfully saved.
     """
 
-    console.print(f"[green]✓[/green] {rtl('تنظیمات با موفقیت ذخیره شدند.')}")
+    console.print(f"[green]✓[/green] {rtl('Settings saved successfully.')}")
 
 
 def show_reset():
@@ -384,7 +390,9 @@ def show_reset():
     Display a message after the settings are reset.
     """
 
-    console.print(f"[yellow]↺[/yellow] {rtl('تنظیمات به حالت اصلی بازگردانده شدند.')}")
+    console.print(
+        f"[yellow]↺[/yellow] {rtl('Settings reset to their default values.')}"
+    )
 
 
 # =========================================================
@@ -397,4 +405,4 @@ def pause():
     Pause execution to let the user review the result.
     """
 
-    questionary.press_any_key_to_continue(rtl("برای ادامه یک کلید فشار دهید...")).ask()
+    questionary.press_any_key_to_continue(rtl("Press any key to continue...")).ask()

@@ -61,7 +61,7 @@ def show_banner():
     )
 
     console.print(
-        "Version 1.0.0",
+        "Version 1.0.1",
         style="dim",
     )
 
@@ -118,33 +118,33 @@ def show_summary(results, errors):
     failed = len(errors)
 
     table = Table(
-        title=rtl("خلاصه پردازش"),
+        title=rtl("Processing Summary"),
         show_header=True,
         header_style="bold",
     )
 
     table.add_column(
-        rtl("مورد"),
+        rtl("Item"),
         justify="right",
     )
 
     table.add_column(
-        rtl("تعداد"),
+        rtl("Count"),
         justify="center",
     )
 
     table.add_row(
-        rtl("کل تصاویر"),
+        rtl("Total Images"),
         str(total),
     )
 
     table.add_row(
-        rtl("موفق"),
+        rtl("Successful"),
         f"[green]{successful}[/green]",
     )
 
     table.add_row(
-        rtl("ناموفق"),
+        rtl("Failed"),
         f"[red]{failed}[/red]" if failed else "0",
     )
 
@@ -161,7 +161,7 @@ def show_summary(results, errors):
             console.print(
                 Panel(
                     f"[bold]{error['file'].name}[/bold]\n" f"{error['error']}",
-                    title=rtl("خطا"),
+                    title=rtl("Error"),
                     border_style="red",
                 )
             )

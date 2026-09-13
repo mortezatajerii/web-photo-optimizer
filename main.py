@@ -117,7 +117,7 @@ def process_images(settings):
     ) as progress:
 
         task = progress.add_task(
-            rtl("در حال پردازش تصاویر..."),
+            rtl("Processing images..."),
             total=len(images),
         )
 
@@ -125,7 +125,7 @@ def process_images(settings):
 
             progress.update(
                 task,
-                description=rtl(f"در حال پردازش: {input_file.name}"),
+                description=rtl(f"Processing: {input_file.name}"),
             )
 
             try:
@@ -233,23 +233,23 @@ def main():
             break
 
         # Process images.
-        if choice == "پردازش تصاویر":
+        if choice == "process_images":
 
             process_images(settings)
 
         # Manage settings.
-        elif choice == "تنظیمات":
+        elif choice == "settings":
 
             manage_settings(settings)
 
         # Display current settings.
-        elif choice == "مشاهده تنظیمات":
+        elif choice == "view_settings":
 
             show_settings(settings)
             pause()
 
         # Reset settings.
-        elif choice == "بازنشانی تنظیمات":
+        elif choice == "reset_settings":
 
             new_settings = reset_user_settings()
 
@@ -257,7 +257,7 @@ def main():
                 settings = new_settings
 
         # Exit application.
-        elif choice == "خروج":
+        elif choice == "exit":
 
             break
 
